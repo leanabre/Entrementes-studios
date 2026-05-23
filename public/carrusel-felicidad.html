@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>La felicidad no es el objetivo — @psico.entrementes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Source+Sans+3:wght@300;400&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #181818;
+  padding: 56px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.page-title {
+  color: rgba(255,255,255,0.35);
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.8;
+}
+.page-title strong { color: rgba(255,255,255,0.7); font-weight: 600; }
+
+.dl-all {
+  background: #C6866E;
+  color: white;
+  border: none;
+  padding: 16px 48px;
+  border-radius: 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.dl-all:hover { background: #b87060; transform: translateY(-1px); }
+
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.slide-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Preview: clips the 1080px slide scaled at 50% */
+.preview {
+  width: 540px;
+  height: 675px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+
+.slide {
+  width: 1080px;
+  height: 1350px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scale(0.5);
+  transform-origin: top left;
+  overflow: hidden;
+}
+
+.dl-btn {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 10px 28px;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.dl-btn:hover { background: rgba(198,134,110,0.3); color: white; border-color: #C6866E; }
+.dl-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ─────────────────────────────────────────
+   SLIDE 1 — PORTADA
+───────────────────────────────────────── */
+.s1 { background: #C6866E; }
+
+.s1-arch {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1360px;
+  height: 1000px;
+  background: #FFF9F1;
+  border-radius: 50% 50% 0 0 / 180px 180px 0 0;
+}
+
+.s1-em {
+  position: absolute;
+  top: 136px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 80px;
+  font-weight: 600;
+  color: #1C1C1C;
+  opacity: 0.35;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.s1-title {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -12%);
+  width: 880px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 108px;
+  color: #1C1C1C;
+  text-align: center;
+  line-height: 1.03;
+}
+
+.s1-byline {
+  position: absolute;
+  bottom: 54px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  letter-spacing: 3px;
+  color: #1C1C1C;
+  opacity: 0.38;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────
+   SLIDE 2 — HOOK
+───────────────────────────────────────── */
+.s2 { background: #FFFFFF; }
+
+.s2-bar {
+  position: absolute;
+  left: 0; top: 0;
+  width: 10px; height: 100%;
+  background: #C6866E;
+}
+
+.s2-ghost {
+  position: absolute;
+  bottom: -100px;
+  right: -30px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 620px;
+  font-weight: 600;
+  color: #C6866E;
+  opacity: 0.05;
+  line-height: 1;
+  user-select: none;
+}
+
+.s2-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 48px;
+  padding: 80px 108px 80px 136px;
+}
+
+.s2-p {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 38px;
+  font-weight: 300;
+  color: #1C1C1C;
+  line-height: 1.6;
+}
+
+.s2-p.accent {
+  font-style: italic;
+  color: #C6866E;
+  font-weight: 400;
+}
+
+.s2-byline {
+  position: absolute;
+  bottom: 54px;
+  right: 100px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  letter-spacing: 2.5px;
+  color: #C6866E;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* ─────────────────────────────────────────
+   SLIDES 3–5 — DESARROLLO / VERDE
+───────────────────────────────────────── */
+.sg { background: #8A9E76; }
+
+.sg-rule {
+  position: absolute;
+  top: 88px;
+  left: 80px; right: 80px;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+.sg-ghost {
+  position: absolute;
+  bottom: -90px;
+  right: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 540px;
+  font-weight: 600;
+  color: white;
+  opacity: 0.055;
+  line-height: 1;
+  user-select: none;
+}
+
+.sg-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 136px 100px 100px;
+}
+
+.sg-p {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 38px;
+  font-weight: 300;
+  color: white;
+  line-height: 1.7;
+}
+
+.sg-byline {
+  position: absolute;
+  bottom: 54px;
+  left: 80px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────
+   SLIDE 6 — CTA
+───────────────────────────────────────── */
+.s6 {
+  background: #C6866E;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.s6-dome {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1360px;
+  height: 560px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 0 0 50% 50% / 0 0 180px 180px;
+}
+
+.s6-icon {
+  position: absolute;
+  top: 168px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.s6-cta {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 120px;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: -5px;
+  line-height: 0.88;
+  position: relative;
+  z-index: 2;
+  margin-top: 48px;
+}
+
+.s6-sub {
+  position: absolute;
+  bottom: 168px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.s6-em {
+  position: absolute;
+  bottom: 54px;
+  right: 80px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 52px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  z-index: 2;
+}
+
+.s6-handle {
+  position: absolute;
+  bottom: 60px;
+  left: 80px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  z-index: 2;
+}
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <strong>La felicidad no es el objetivo</strong><br>
+  @psico.entrementes · 6 slides · 1080 × 1350 px
+</div>
+
+<button class="dl-all" onclick="dlAll()">↓ Descargar los 6 slides</button>
+
+<!-- ── SLIDE 1 ── -->
+<div class="unit">
+  <div class="slide-label">01 — Portada</div>
+  <div class="preview">
+    <div class="slide s1" id="slide1">
+      <div class="s1-arch"></div>
+      <div class="s1-em">EM</div>
+      <div class="s1-title">La felicidad<br>no es el objetivo</div>
+      <div class="s1-byline">@psico.entrementes · Lic. Lean Abrevaya</div>
+    </div>
+  </div>
+  <button class="dl-btn" onclick="dl('slide1','01-portada.png')">↓ Descargar PNG</button>
+</div>
+
+<!-- ── SLIDE 2 ── -->
+<div class="unit">
+  <div class="slide-label">02 — Hook</div>
+  <div class="preview">
+    <div class="slide s2" id="slide2">
+      <div class="s2-bar"></div>
+      <div class="s2-ghost">?</div>
+      <div class="s2-inner">
+        <p class="s2-p">Te pasó que te sentís vacío/a después de alcanzar algo que pensabas que te haría feliz.</p>
+        <p class="s2-p">Como si la meta no fuera la meta, sino el camino.</p>
+        <p class="s2-p accent">¿Qué pasa cuando el camino se termina?</p>
+      </div>
+      <div class="s2-byline">@psico.entrementes</div>
+    </div>
+  </div>
+  <button class="dl-btn" onclick="dl('slide2','02-hook.png')">↓ Descargar PNG</button>
+</div>
+
+<!-- ── SLIDE 3 ── -->
+<div class="unit">
+  <div class="slide-label">03 — Desarrollo</div>
+  <div class="preview">
+    <div class="slide sg" id="slide3">
+      <div class="sg-rule"></div>
+      <div class="sg-ghost">3</div>
+      <div class="sg-inner">
+        <p class="sg-p">La sociedad nos enseña que la felicidad es un destino, no un proceso.<br><br>Que hay que llegar a algún lugar para ser feliz.<br><br>Pero la vida auténtica no se trata de llegar, sino de vivir. De sentir cada momento, no solo los finales.</p>
+      </div>
+      <div class="sg-byline">@psico.entrementes</div>
+    </div>
+  </div>
+  <button class="dl-btn" onclick="dl('slide3','03-desarrollo.png')">↓ Descargar PNG</button>
+</div>
+
+<!-- ── SLIDE 4 ── -->
+<div class="unit">
+  <div class="slide-label">04 — Desarrollo</div>
+  <div class="preview">
+    <div class="slide sg" id="slide4">
+      <div class="sg-rule"></div>
+      <div class="sg-ghost">4</div>
+      <div class="sg-inner">
+        <p class="sg-p">Cuando vivís una vida auténtica, no buscas la felicidad como un premio.<br><br>La felicidad es el resultado de vivir cada día con propósito, con pasión, con conexión.<br><br>No es algo que se alcanza, sino algo que se vive.</p>
+      </div>
+      <div class="sg-byline">@psico.entrementes</div>
+    </div>
+  </div>
+  <button class="dl-btn" onclick="dl('slide4','04-desarrollo.png')">↓ Descargar PNG</button>
+</div>
+
+<!-- ── SLIDE 5 ── -->
+<div class="unit">
+  <div class="slide-label">05 — Valor</div>
+  <div class="preview">
+    <div class="slide sg" id="slide5">
+      <div class="sg-rule"></div>
+      <div class="sg-ghost">5</div>
+      <div class="sg-inner">
+        <p class="sg-p">La vida auténtica es un viaje, no un destino.<br><br>Y en ese viaje, la felicidad es el resultado de cada paso que das, de cada decisión que tomás, de cada conexión que hacés.<br><br>No es algo que se compra, se vende o se promete.</p>
+      </div>
+      <div class="sg-byline">@psico.entrementes</div>
+    </div>
+  </div>
+  <button class="dl-btn" onclick="dl('slide5','05-valor.png')">↓ Descargar PNG</button>
+</div>
+
+<!-- ── SLIDE 6 ── -->
+<div class="unit">
+  <div class="slide-label">06 — CTA</div>
+  <div class="preview">
+    <div class="slide s6" id="slide6">
+      <div class="s6-dome"></div>
+      <div class="s6-icon">
+        <svg width="76" height="76" viewBox="0 0 76 76" fill="none">
+          <circle cx="38" cy="38" r="36" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <path d="M38 20 L38 50 M26 40 L38 52 L50 40" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="s6-cta">Guardá<br>esto</div>
+      <div class="s6-sub">Si te resonó, mandáselo a alguien</div>
+      <div class="s6-em">EM</div>
+      <div class="s6-handle">@psico.entrementes</div>
+    </div>
+  </div>
+  <button class="dl-btn" onclick="dl('slide6','06-cta.png')">↓ Descargar PNG</button>
+</div>
+
+<div class="page-title" style="padding-bottom: 32px;">
+  Abrí en Chrome · los slides se descargan a 1080 × 1350 px
+</div>
+
+<script>
+const FILES = [
+  ['slide1', '01-portada.png'],
+  ['slide2', '02-hook.png'],
+  ['slide3', '03-desarrollo.png'],
+  ['slide4', '04-desarrollo.png'],
+  ['slide5', '05-valor.png'],
+  ['slide6', '06-cta.png'],
+];
+
+async function capture(id) {
+  const el = document.getElementById(id);
+  // Clone without transform so html2canvas sees full 1080×1350
+  const clone = el.cloneNode(true);
+  clone.style.transform = 'none';
+  clone.style.position = 'fixed';
+  clone.style.top = '-9999px';
+  clone.style.left = '-9999px';
+  clone.style.width = '1080px';
+  clone.style.height = '1350px';
+  document.body.appendChild(clone);
+
+  await document.fonts.ready;
+
+  try {
+    const canvas = await html2canvas(clone, {
+      scale: 1,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: null,
+      width: 1080,
+      height: 1350,
+      logging: false,
+    });
+    return canvas.toDataURL('image/png');
+  } finally {
+    document.body.removeChild(clone);
+  }
+}
+
+async function dl(id, filename) {
+  const btn = event.currentTarget;
+  const orig = btn.textContent;
+  btn.textContent = 'Generando…';
+  btn.disabled = true;
+  try {
+    const dataUrl = await capture(id);
+    const a = document.createElement('a');
+    a.download = filename;
+    a.href = dataUrl;
+    a.click();
+    btn.textContent = '✓ Descargado';
+    setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2000);
+  } catch (e) {
+    console.error(e);
+    btn.textContent = 'Error — intentá de nuevo';
+    btn.disabled = false;
+  }
+}
+
+async function dlAll() {
+  const btn = event.currentTarget;
+  btn.textContent = 'Generando todos…';
+  btn.disabled = true;
+  for (const [id, name] of FILES) {
+    try {
+      const dataUrl = await capture(id);
+      const a = document.createElement('a');
+      a.download = name;
+      a.href = dataUrl;
+      a.click();
+      await new Promise(r => setTimeout(r, 800)); // stagger downloads
+    } catch (e) { console.error(e); }
+  }
+  btn.textContent = '✓ Todos descargados';
+  setTimeout(() => { btn.textContent = '↓ Descargar los 6 slides'; btn.disabled = false; }, 3000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+// pages/Ideas.jsx — Módulo 1: Banco de Ideas
+import React, { useState, useMemo } from 'react'
+import { useStore, uid } from '../lib/store.js'
+import { callGeminiJSON } from '../lib/gemini.js'
+import { buildIdeasPrompt } from '../lib/prompts.js'
+import { LoadingState, EmptyState, ScoreBar, FormatTag, Modal } from '../components/UI.jsx'
+import clsx from 'clsx'
+
+export default function Ideas({ onSendToCopy }) {
+  const { ideas, setIdeas, importIdeas, deleteIdea, clearIdeas, notify, setPage } = useStore()
+
+  const [loading, setLoading]           = useState(false)
+  const [error, setError]               = useState(null)
+  const [selected, setSelected]         = useState(new Set())
+  const [formatFilter, setFormatFilter] = useState('todos')
+  const [focus, setFocus]               = useState('')
+  const [avoid, setAvoid]               = useState('')
+  const [showImport, setShowImport]     = useState(false)
+  const [importText, setImportText]     = useState('')
+  const [showNew, setShowNew]           = useState(false)
+  const [newIdea, setNewIdea]           = useState({ text: '', format: 'carrusel', block: 'A', score: 75 })
+
+  const blockA = useMemo(() => ideas.filter(i => i.block === 'A' || i.block === 'importado'), [ideas])
+  const blockB = useMemo(() => ideas.filter(i => i.block === 'B'), [ideas])
+  const applyFilter = (list) => formatFilter === 'todos' ? list : list.filter(i => i.format === formatFilter)
+
+  const handleGenerate = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const prompt = buildIdeasPrompt({ focus, avoid, existingIdeas: ideas, formatFilter })
+      const data   = await callGeminiJSON(prompt, { maxTokens: 2000 })
+      const newIdeas = [
+        ...(data.bloque_a || []).map(i => ({ id: uid(), text: i.texto, score: i.score || 75, format: i.formato || 'carrusel', block: 'A' })),
+        ...(data.bloque_b || []).map(i => ({ id: uid(), text: i.texto, score: i.score || 75, format: i.formato || 'carrusel', block: 'B' })),
+      ]
+      setIdeas(newIdeas)
+      setSelected(new Set())
+      notify(`✓ ${newIdeas.length} ideas generadas`)
+    } catch (e) {
+      setError(e.message)
+    }
+    setLoading(false)
+  }
+
+  const handleImport = () => {
+    if (!importText.trim()) return
+    const count = importIdeas(importText)
+    setImportText(''); setShowImport(false); setSelected(new Set())
+    notify(`✓ ${count} ideas importadas`)
+  }
+
+  const handleAddNew = () => {
+    if (!newIdea.text.trim()) return
+    setIdeas([{ id: uid(), text: newIdea.text.trim(), format: newIdea.format, block: newIdea.block, score: newIdea.score }])
+    setNewIdea({ text: '', format: 'carrusel', block: 'A', score: 75 })
+    setShowNew(false)
+    notify('✓ Idea agregada al banco')
+  }
+
+  const toggleSelect = (id) => {
+    setSelected(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n })
+  }
+
+  const handleSendToCopy = () => {
+    const first = ideas.find(i => selected.has(i.id))
+    if (first) { onSendToCopy(first.text); setPage('copy') }
+  }
+
+  const handleDelete = (id, e) => {
+    e.stopPropagation()
+    deleteIdea(id)
+    setSelected(prev => { const n = new Set(prev); n.delete(id); return n })
+  }
+
+  return (
+    <div>
+      <div className="page-header">
+        <div>
+          <div className="page-title">Módulo 1 — Banco de Ideas</div>
+          <div className="page-sub">Generá, importá y rankeá ideas para @psico.entrementes</div>
+        </div>
+        <div className="page-actions">
+          {ideas.length > 0 && (
+            <button className="btn btn-ghost btn-sm" onClick={() => { clearIdeas(); setSelected(new Set()) }}>
+              <i className="ti ti-trash" /> Limpiar banco
+            </button>
+          )}
+          <button className="btn btn-secondary btn-sm" onClick={() => setShowNew(true)}>
+            <i className="ti ti-plus" /> Nueva manual
+          </button>
+          <button className="btn btn-secondary" onClick={() => setShowImport(!showImport)}>
+            <i className="ti ti-upload" /> Importar lista
+          </button>
+          <button className="btn btn-primary" onClick={handleGenerate} disabled={loading}>
+            <i className="ti ti-sparkles" /> {loading ? 'Generando...' : 'Generar ideas'}
+          </button>
+        </div>
+      </div>
+
+      {/* Config */}
+      <div className="card mb-2">
+        <div className="module-badge">
+          <div className="module-num">1</div>
+          <div>
+            <div className="module-title">Generador con score de viralizabilidad</div>
+            <div className="module-sub">Analiza patrones del nicho y genera 20 ideas rankeadas por potencial viral</div>
+          </div>
+        </div>
+        <div className="grid-2">
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Foco temático (opcional)</label>
+            <input className="input" value={focus} onChange={e => setFocus(e.target.value)}
+              placeholder="Ej: ansiedad, vínculos adultos, autoexigencia..." />
+          </div>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label className="form-label">Formato preferido</label>
+            <div className="format-tabs">
+              {['todos', 'carrusel', 'story', 'post'].map(f => (
+                <button key={f} className={clsx('format-tab', formatFilter === f && 'active')} onClick={() => setFormatFilter(f)}>
+                  {f === 'todos' ? 'Todos' : f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="form-group mt-2" style={{ marginBottom: 0 }}>
+          <label className="form-label">Temas recientes a evitar</label>
+          <textarea className="textarea" style={{ minHeight: 60 }} value={avoid} onChange={e => setAvoid(e.target.value)}
+            placeholder="Pegá los títulos de tus últimas publicaciones para no repetir territorio..." />
+        </div>
+      </div>
+
+      {/* Import panel */}
+      {showImport && (
+        <div className="card mb-2">
+          <div className="flex-row" style={{ justifyContent: 'space-between', marginBottom: 14 }}>
+            <div style={{ fontWeight: 600, fontSize: 14 }}>Importar banco existente</div>
+            <button className="btn btn-ghost btn-icon btn-sm" onClick={() => setShowImport(false)}><i className="ti ti-x" /></button>
+          </div>
+          <textarea className="textarea" value={importText} onChange={e => setImportText(e.target.value)}
+            style={{ minHeight: 140 }}
+            placeholder={'Pegá tu lista — una idea por línea:\n5 verdades sobre el duelo que nadie te prepara para escuchar.\nLo que scrollear dos horas a la noche le está haciendo a tu cabeza.'} />
+          <div className="flex-row mt-1">
+            <button className="btn btn-primary" onClick={handleImport} disabled={!importText.trim()}>
+              <i className="ti ti-check" /> Importar
+            </button>
+            <button className="btn btn-secondary" onClick={() => setShowImport(false)}>Cancelar</button>
+          </div>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="card mb-2" style={{ borderColor: 'rgba(192,57,43,0.3)', background: 'rgba(192,57,43,0.04)' }}>
+          <div className="flex-row" style={{ gap: 10 }}>
+            <i className="ti ti-alert-circle" style={{ color: '#c0392b', fontSize: 18 }} />
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#c0392b' }}>Error al generar ideas</div>
+              <div style={{ fontSize: 12, color: 'var(--txt2)', marginTop: 3 }}>{error}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {loading && <div className="card mb-2"><LoadingState msg="Analizando patrones del nicho y generando ideas..." /></div>}
+
+      {!loading && ideas.length === 0 && (
+        <EmptyState icon="ti-bulb" title="Generá tu primer banco de ideas o importá tu lista existente." />
+      )}
+
+      {!loading && applyFilter(blockA).length > 0 && (
+        <IdeaBlock title="Bloque A — Rompe patrones" icon="ti-arrows-shuffle"
+          ideas={applyFilter(blockA)} selected={selected} onToggle={toggleSelect} onDelete={handleDelete} />
+      )}
+      {!loading && applyFilter(blockB).length > 0 && (
+        <IdeaBlock title="Bloque B — Alto impacto viral" icon="ti-trending-up"
+          ideas={applyFilter(blockB)} selected={selected} onToggle={toggleSelect} onDelete={handleDelete} />
+      )}
+
+      {/* Floating action bar */}
+      {selected.size > 0 && (
+        <div style={{ position: 'sticky', bottom: 20, display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 16 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 12, padding: '10px 16px', display: 'flex', gap: 10, alignItems: 'center', boxShadow: 'var(--shadow-md)' }}>
+            <span style={{ fontSize: 13, color: 'var(--txt2)' }}>{selected.size} idea{selected.size > 1 ? 's' : ''} seleccionada{selected.size > 1 ? 's' : ''}</span>
+            <button className="btn btn-ghost btn-sm" onClick={() => setSelected(new Set())}><i className="ti ti-x" /> Limpiar</button>
+            <button className="btn btn-primary btn-sm" onClick={handleSendToCopy}><i className="ti ti-writing" /> Desarrollar en Copy Studio</button>
+          </div>
+        </div>
+      )}
+
+      {/* Nueva idea manual */}
+      {showNew && (
+        <Modal title="Nueva idea manual" onClose={() => setShowNew(false)} width={500}>
+          <div className="form-group">
+            <label className="form-label">Idea / hook</label>
+            <textarea className="textarea" style={{ minHeight: 90 }} autoFocus
+              value={newIdea.text} onChange={e => setNewIdea(p => ({ ...p, text: e.target.value }))}
+              placeholder="Escribí el título o hook de la idea..." />
+          </div>
+          <div className="grid-2">
+            <div className="form-group">
+              <label className="form-label">Formato</label>
+              <div className="format-tabs" style={{ flexWrap: 'wrap' }}>
+                {['carrusel', 'story', 'post'].map(f => (
+                  <button key={f} className={clsx('format-tab', newIdea.format === f && 'active')} onClick={() => setNewIdea(p => ({ ...p, format: f }))}>
+                    {f.charAt(0).toUpperCase() + f.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Bloque</label>
+              <div className="format-tabs" style={{ flexWrap: 'wrap' }}>
+                {[{ key: 'A', label: 'A — Rompe patrones' }, { key: 'B', label: 'B — Viral' }].map(b => (
+                  <button key={b.key} className={clsx('format-tab', newIdea.block === b.key && 'active')} onClick={() => setNewIdea(p => ({ ...p, block: b.key }))}>
+                    {b.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Score — {newIdea.score}/100</label>
+            <input type="range" min="50" max="100" value={newIdea.score}
+              onChange={e => setNewIdea(p => ({ ...p, score: Number(e.target.value) }))}
+              style={{ width: '100%', accentColor: 'var(--tc)' }} />
+          </div>
+          <div className="flex-row">
+            <button className="btn btn-primary" onClick={handleAddNew} disabled={!newIdea.text.trim()}>
+              <i className="ti ti-plus" /> Agregar al banco
+            </button>
+            <button className="btn btn-secondary" onClick={() => setShowNew(false)}>Cancelar</button>
+          </div>
+        </Modal>
+      )}
+    </div>
+  )
+}
+
+function IdeaBlock({ title, icon, ideas, selected, onToggle, onDelete }) {
+  return (
+    <div style={{ marginBottom: 24 }}>
+      <div className="section-title">
+        <i className={clsx('ti', icon)} />{title}
+        <span style={{ fontSize: 11, fontWeight: 400, color: 'var(--txt3)' }}>{ideas.length} ideas</span>
+      </div>
+      <div className="grid-2">
+        {ideas.map(idea => (
+          <div key={idea.id} className={clsx('idea-card', selected.has(idea.id) && 'selected')} onClick={() => onToggle(idea.id)}>
+            <div className="idea-text">{idea.text}</div>
+            <div className="idea-meta">
+              <FormatTag format={idea.format} />
+              {idea.block === 'A' && <span className="tag tag-verde">Rompe patrones</span>}
+              {idea.block === 'B' && <span className="tag tag-tc">Viral</span>}
+              {idea.block === 'importado' && <span className="tag tag-default">Importado</span>}
+              <button className="btn btn-ghost btn-sm" style={{ marginLeft: 'auto', padding: '2px 6px' }}
+                onClick={e => onDelete(idea.id, e)}><i className="ti ti-x" style={{ fontSize: 11 }} /></button>
+            </div>
+            <ScoreBar score={idea.score} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
