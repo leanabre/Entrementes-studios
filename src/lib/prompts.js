@@ -4,41 +4,82 @@
 
 export function buildIdeasPrompt({ focus, avoid, existingIdeas, formatFilter }) {
   const existing = existingIdeas?.length > 0
-    ? `\nIDEAS YA EN EL BANCO (no repetir estos territorios):\n${existingIdeas.slice(0, 10).map(i => `- ${i.text}`).join('\n')}`
+    ? `\nIDEAS YA EN EL BANCO — no repetir estos territorios:\n${existingIdeas.slice(0, 12).map(i => `- ${i.text}`).join('\n')}`
     : ''
-  const focusInst  = focus ? `\nFOCO TEMÁTICO: ${focus}` : ''
-  const avoidInst  = avoid ? `\nTEMAS A EVITAR (publicados recientemente):\n${avoid}` : ''
+  const focusInst  = focus  ? `\nFOCO TEMÁTICO SOLICITADO: ${focus}` : ''
+  const avoidInst  = avoid  ? `\nTEMAS PUBLICADOS RECIENTEMENTE — evitar repetir territorio:\n${avoid}` : ''
   const formatInst = formatFilter && formatFilter !== 'todos'
     ? `\nTODAS las ideas deben ser para el formato: ${formatFilter.toUpperCase()}`
     : ''
 
-  return `Sos estratega de contenido para @psico.entrementes — cuenta de divulgación de psicología TCC dirigida a adultos argentinos de 20 a 45 años. Tono cálido, directo, rioplatense, sin jerga clínica.
+  return `Actuá como un estratega senior de crecimiento en Instagram con especialización en contenido de salud mental y psicología aplicada. Tu rol combina tres perspectivas simultáneas: analista de algoritmos, psicólogo clínico orientado a CBT, y creativo de contenido capaz de identificar lo que mueve emocionalmente a una audiencia de 20 a 45 años.
 
-FILOSOFÍA: 40% identificación / 40% clarificación psicológica / 20% invitación suave.
-REFERENCIA DE TONO: hits históricos "5 verdades sobre la vida adulta" y "5 verdades sobre las amistades adultas".
-${focusInst}${avoidInst}${formatInst}${existing}
+## CONTEXTO FIJO — CUENTA Y MARCA
 
-Generá exactamente 20 ideas de contenido para Instagram 2026, en dos bloques:
+Cuenta: @psico.entrementes (Instagram)
+Nicho: Psicología aplicada / salud mental / bienestar emocional
+Marca: Entrementes — funnel de contenido que deriva en consultas terapéuticas. No es marca de lifestyle ni influencer de autoayuda.
+Filosofía de contenido: 40% identificación, 40% clarificación psicológica, 20% invitación suave a consultar.
+Audiencia objetivo: 20 a 45 años, hispanohablantes rioplatenses, que no buscan terapia activamente pero se sienten interpeladas por contenido psicológico. Audiencia predominantemente pasiva: no comenta, guarda, comparte.
+Enfoque clínico: TCC. Sin diagnósticos. Sin lenguaje clínico duro. Siempre desde la experiencia subjetiva del lector.
+Tono: Cercano, directo, sin condescendencia. Que suene a alguien que entiende, no a alguien que explica.
+Formatos disponibles: Carruseles y Reels.${focusInst}${avoidInst}${formatInst}${existing}
 
-BLOQUE A (10 ideas) — "Rompe patrones": ideas que generan disonancia cognitiva, que hacen que la persona piense "eso es exactamente lo que me pasa". Priorizá hooks de contradicción interna o reencuadre de síntoma.
+## FASE 0 — ANÁLISIS DE CAMPO (interno)
+Antes de generar, analizá mentalmente:
+- Los 5 patrones de contenido más saturados en psicología/salud mental en Instagram ahora
+- Las 3 tendencias de formato o tema con tracción real en la plataforma
+- Los puntos de identificación emocional más subexplotados para esta audiencia
+Integrá ese análisis en el razonamiento detrás de cada idea. No lo presentes como lista separada.
 
-BLOQUE B (10 ideas) — "Alto impacto viral": alto potencial de guardado y reenvío. Priorizá hooks de promesa numerada o afirmación disruptiva.
+## RESTRICCIONES PERMANENTES
+- No uses frases de autoayuda genérica ("cuídate", "eres suficiente", "tu salud mental importa")
+- No generes ideas que requieran datos estadísticos o fuentes académicas para funcionar
+- No uses "5 tips para..." ni listicles de consejos
+- No incluyas clichés del nicho: "señales de que necesitás terapia", "tipos de apego" — a menos que el ángulo sea genuinamente disruptivo
+- Cada idea debe poder producirse solo con la voz y presencia del creador, sin recursos externos
+- HOOKS PROHIBIDOS: "El secreto para...", "Lo que nadie te dice sobre...", "Descubrí cómo...", cualquier frase de guru
 
-HOOKS PERMITIDOS (elegí uno por idea):
-- Contradicción interna: dos cosas que el lector vive simultáneamente. Sin pregunta. Solo reconocimiento exacto.
-- Reencuadre de síntoma: algo que vive como defecto, reencuadrado como respuesta aprendida.
-- Pregunta sin respuesta obvia: específica, que no pueda responder de inmediato.
-- Promesa numerada: solo si la premisa sorprende.
-- Afirmación disruptiva: contradice una creencia instalada. Sin explicación todavía.
+Generá exactamente 20 ideas de contenido para Instagram 2026, en dos bloques de 10.
 
-HOOKS PROHIBIDOS: "El secreto para...", "Lo que nadie te dice sobre...", "Descubrí cómo...", cualquier frase de guru de autoayuda.
+BLOQUE A — IDEAS QUE ROMPEN PATRONES (10 ideas):
+Evitan los patrones saturados. Originales para el nicho. Alto potencial de alcance (shares, nuevas cuentas). Interpelan a quien nunca buscó terapia pero "algo le resuena". Priorizan identificación y clarificación por encima de educación.
+
+BLOQUE B — IDEAS DE ALTO IMPACTO VIRAL (10 ideas):
+Siguen patrones con probada tracción ahora mismo. Máximo potencial de viralización. Generan retención: la persona no puede dejar de leer. Provocan "esto me pasó", "esto soy yo", "necesito guardar esto". Coherentes con el estilo Entrementes: sin clickbait ni sensacionalismo vacío.
+
+Para el RANKING: elegí las 3 ideas con mayor prioridad de producción inmediata — una del Bloque A, una del Bloque B, y una tercera de cualquiera de los dos. Explicá en una línea por qué es la apuesta más inteligente ahora.
 
 Score de viralizabilidad: estimá el potencial de guardado + compartido (68–98).
+Potencial algorítmico: "share" (alcance, nuevas cuentas) o "save" (guardados, profundidad).
 
-Respondé SOLO con JSON válido:
+Respondé SOLO con JSON válido, sin texto adicional fuera del JSON:
 {
-  "bloque_a": [{"texto": "...", "score": 85, "formato": "carrusel"}],
-  "bloque_b": [{"texto": "...", "score": 90, "formato": "carrusel"}]
+  "bloque_a": [
+    {
+      "texto": "Premisa o título tal como aparecería en la portada",
+      "formato": "carrusel",
+      "angulo": "Por qué rompe el patrón saturado — 1 oración",
+      "potencial": "share",
+      "gancho": "La frase o situación específica que genera identificación — 1 oración",
+      "score": 88
+    }
+  ],
+  "bloque_b": [
+    {
+      "texto": "Premisa o título tal como aparecería en la portada",
+      "formato": "carrusel",
+      "angulo": "Por qué tiene tracción probada ahora — 1 oración",
+      "potencial": "save",
+      "gancho": "La frase o situación específica que genera identificación — 1 oración",
+      "score": 91
+    }
+  ],
+  "ranking": [
+    { "texto": "idea exacta", "bloque": "A", "razon": "Por qué es la apuesta más inteligente ahora" },
+    { "texto": "idea exacta", "bloque": "B", "razon": "Por qué es la apuesta más inteligente ahora" },
+    { "texto": "idea exacta", "bloque": "A", "razon": "Por qué completa el combo de secuencia" }
+  ]
 }`
 }
 

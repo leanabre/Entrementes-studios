@@ -19,6 +19,8 @@ export default function Ideas({ onSendToCopy }) {
   const [importText, setImportText]     = useState('')
   const [showNew, setShowNew]           = useState(false)
   const [newIdea, setNewIdea]           = useState({ text: '', format: 'carrusel', block: 'A', score: 75 })
+  const [ranking, setRanking]           = useState([])
+  const [expandedId, setExpandedId]     = useState(null)
 
   const blockA = useMemo(() => ideas.filter(i => i.block === 'A' || i.block === 'importado'), [ideas])
   const blockB = useMemo(() => ideas.filter(i => i.block === 'B'), [ideas])
@@ -29,11 +31,21 @@ export default function Ideas({ onSendToCopy }) {
     setError(null)
     try {
       const prompt = buildIdeasPrompt({ focus, avoid, existingIdeas: ideas, formatFilter })
-      const data   = await callGeminiJSON(prompt, { maxTokens: 2000 })
+      const data   = await callGeminiJSON(prompt, { maxTokens: 3200 })
       const newIdeas = [
-        ...(data.bloque_a || []).map(i => ({ id: uid(), text: i.texto, score: i.score || 75, format: i.formato || 'carrusel', block: 'A' })),
-        ...(data.bloque_b || []).map(i => ({ id: uid(), text: i.texto, score: i.score || 75, format: i.formato || 'carrusel', block: 'B' })),
+        ...(data.bloque_a || []).map(i => ({
+          id: uid(), text: i.texto, score: i.score || 75,
+          format: i.formato || 'carrusel', block: 'A',
+          angulo: i.angulo || '', potencial: i.potencial || 'save', gancho: i.gancho || '',
+        })),
+        ...(data.bloque_b || []).map(i => ({
+          id: uid(), text: i.texto, score: i.score || 75,
+          format: i.formato || 'carrusel', block: 'B',
+          angulo: i.angulo || '', potencial: i.potencial || 'save', gancho: i.gancho || '',
+        })),
       ]
+      // Guardar ranking separado en estado local (no persiste — es contextual a esta generación)
+      setRanking(data.ranking || [])
       setIdeas(newIdeas)
       setSelected(new Set())
       notify(`✓ ${newIdeas.length} ideas generadas`)
@@ -169,13 +181,60 @@ export default function Ideas({ onSendToCopy }) {
         <EmptyState icon="ti-bulb" title="Generá tu primer banco de ideas o importá tu lista existente." />
       )}
 
+      {/* Ranking de producción inmediata */}
+      {!loading && ranking.length > 0 && (
+        <div className="card mb-2" style={{ borderLeft: '3px solid var(--tc)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+            <i className="ti ti-trophy" style={{ color: 'var(--tc)', fontSize: 16 }} />
+            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--txt)', letterSpacing: '0.02em' }}>
+              RANKING DE PRODUCCIÓN INMEDIATA
+            </div>
+            <span style={{ fontSize: 11, color: 'var(--txt3)', marginLeft: 'auto' }}>
+              Las 3 apuestas más inteligentes ahora
+            </span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {ranking.map((r, i) => (
+              <div key={i} style={{
+                display: 'flex', gap: 12, alignItems: 'flex-start',
+                padding: '10px 14px', borderRadius: 10,
+                background: 'var(--surface2)', border: '1px solid var(--border)',
+              }}>
+                <div style={{
+                  width: 26, height: 26, borderRadius: '50%', background: 'var(--tc)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 700,
+                  color: 'var(--beige)', flexShrink: 0,
+                }}>{i + 1}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--txt)', lineHeight: 1.4, marginBottom: 4 }}>
+                    {r.texto}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: 'var(--txt2)', lineHeight: 1.5 }}>
+                    {r.razon}
+                  </div>
+                </div>
+                <span style={{
+                  fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20,
+                  background: r.bloque === 'A' ? 'rgba(143,170,118,0.15)' : 'rgba(198,134,110,0.15)',
+                  color: r.bloque === 'A' ? 'var(--green)' : 'var(--tc)',
+                  letterSpacing: '0.5px', flexShrink: 0,
+                }}>BLOQUE {r.bloque}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {!loading && applyFilter(blockA).length > 0 && (
         <IdeaBlock title="Bloque A — Rompe patrones" icon="ti-arrows-shuffle"
-          ideas={applyFilter(blockA)} selected={selected} onToggle={toggleSelect} onDelete={handleDelete} />
+          ideas={applyFilter(blockA)} selected={selected} onToggle={toggleSelect} onDelete={handleDelete}
+          expandedId={expandedId} onExpand={setExpandedId} />
       )}
       {!loading && applyFilter(blockB).length > 0 && (
         <IdeaBlock title="Bloque B — Alto impacto viral" icon="ti-trending-up"
-          ideas={applyFilter(blockB)} selected={selected} onToggle={toggleSelect} onDelete={handleDelete} />
+          ideas={applyFilter(blockB)} selected={selected} onToggle={toggleSelect} onDelete={handleDelete}
+          expandedId={expandedId} onExpand={setExpandedId} />
       )}
 
       {/* Floating action bar */}
@@ -238,7 +297,7 @@ export default function Ideas({ onSendToCopy }) {
   )
 }
 
-function IdeaBlock({ title, icon, ideas, selected, onToggle, onDelete }) {
+function IdeaBlock({ title, icon, ideas, selected, onToggle, onDelete, expandedId, onExpand }) {
   return (
     <div style={{ marginBottom: 24 }}>
       <div className="section-title">
@@ -247,20 +306,79 @@ function IdeaBlock({ title, icon, ideas, selected, onToggle, onDelete }) {
       </div>
       <div className="grid-2">
         {ideas.map(idea => (
-          <div key={idea.id} className={clsx('idea-card', selected.has(idea.id) && 'selected')} onClick={() => onToggle(idea.id)}>
-            <div className="idea-text">{idea.text}</div>
-            <div className="idea-meta">
-              <FormatTag format={idea.format} />
-              {idea.block === 'A' && <span className="tag tag-verde">Rompe patrones</span>}
-              {idea.block === 'B' && <span className="tag tag-tc">Viral</span>}
-              {idea.block === 'importado' && <span className="tag tag-default">Importado</span>}
-              <button className="btn btn-ghost btn-sm" style={{ marginLeft: 'auto', padding: '2px 6px' }}
-                onClick={e => onDelete(idea.id, e)}><i className="ti ti-x" style={{ fontSize: 11 }} /></button>
-            </div>
-            <ScoreBar score={idea.score} />
-          </div>
+          <IdeaCard key={idea.id} idea={idea}
+            isSelected={selected.has(idea.id)}
+            isExpanded={expandedId === idea.id}
+            onToggle={() => onToggle(idea.id)}
+            onDelete={e => onDelete(idea.id, e)}
+            onExpand={() => onExpand(expandedId === idea.id ? null : idea.id)}
+          />
         ))}
       </div>
+    </div>
+  )
+}
+
+function IdeaCard({ idea, isSelected, isExpanded, onToggle, onDelete, onExpand }) {
+  const potencialIcon = idea.potencial === 'share' ? '🔁' : '💾'
+  const potencialLabel = idea.potencial === 'share' ? 'Alcance' : 'Guardados'
+  const hasDetails = idea.angulo || idea.gancho
+
+  return (
+    <div className={clsx('idea-card', isSelected && 'selected')} onClick={onToggle}
+      style={{ cursor: 'pointer', userSelect: 'none' }}>
+
+      {/* Texto principal */}
+      <div className="idea-text">{idea.text}</div>
+
+      {/* Detalles expandibles (ángulo y gancho) */}
+      {hasDetails && isExpanded && (
+        <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 8 }}
+          onClick={e => e.stopPropagation()}>
+          {idea.angulo && (
+            <div style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--txt2)',
+              background: 'var(--surface2)', borderRadius: 8, padding: '8px 10px',
+              borderLeft: '2px solid var(--tc)' }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--tc)', textTransform: 'uppercase',
+                letterSpacing: '0.5px', display: 'block', marginBottom: 3 }}>Ángulo disruptivo</span>
+              {idea.angulo}
+            </div>
+          )}
+          {idea.gancho && (
+            <div style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--txt2)',
+              background: 'var(--surface2)', borderRadius: 8, padding: '8px 10px',
+              borderLeft: '2px solid var(--green)' }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--green)', textTransform: 'uppercase',
+                letterSpacing: '0.5px', display: 'block', marginBottom: 3 }}>Gancho emocional</span>
+              {idea.gancho}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Meta: tags + acciones */}
+      <div className="idea-meta" style={{ marginTop: 10 }}>
+        <FormatTag format={idea.format} />
+        {idea.block === 'A' && <span className="tag tag-verde">Rompe patrones</span>}
+        {idea.block === 'B' && <span className="tag tag-tc">Viral</span>}
+        {idea.block === 'importado' && <span className="tag tag-default">Importado</span>}
+        {idea.potencial && (
+          <span title={potencialLabel} style={{ fontSize: 12 }}>{potencialIcon}</span>
+        )}
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }} onClick={e => e.stopPropagation()}>
+          {hasDetails && (
+            <button className="btn btn-ghost btn-sm" style={{ padding: '2px 6px' }}
+              onClick={onExpand} title={isExpanded ? 'Ocultar detalles' : 'Ver ángulo y gancho'}>
+              <i className={clsx('ti', isExpanded ? 'ti-chevron-up' : 'ti-info-circle')} style={{ fontSize: 11 }} />
+            </button>
+          )}
+          <button className="btn btn-ghost btn-sm" style={{ padding: '2px 6px' }} onClick={onDelete}>
+            <i className="ti ti-x" style={{ fontSize: 11 }} />
+          </button>
+        </div>
+      </div>
+
+      <ScoreBar score={idea.score} />
     </div>
   )
 }
