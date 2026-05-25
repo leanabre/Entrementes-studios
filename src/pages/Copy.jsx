@@ -7,11 +7,12 @@ import { LoadingState, FormatTag, Modal } from '../components/UI.jsx'
 import clsx from 'clsx'
 
 const STRUCTURES = [
-  { id: 'auto',           label: 'Auto',      desc: 'modelo elige' },
-  { id: 'AIDA',           label: 'AIDA',      desc: 'detención + scroll' },
-  { id: 'transformacion', label: 'Transf.',   desc: 'problema → cambio' },
-  { id: 'listicle',       label: 'Listicle',  desc: 'verdades / señales' },
-  { id: 'contraste',      label: 'Contraste', desc: 'creencia vs realidad' },
+  { id: 'auto',           label: 'Auto',       desc: 'modelo elige' },
+  { id: 'AIDA',           label: 'AIDA',       desc: 'detención + scroll' },
+  { id: 'transformacion', label: 'Transf.',    desc: 'problema → cambio' },
+  { id: 'listicle',       label: 'Listicle',   desc: 'verdades / señales' },
+  { id: 'resignificado',  label: 'Resignific.', desc: 'concepto cotidiano' },
+  { id: 'contraste',      label: 'Contraste',  desc: 'creencia vs realidad' },
 ]
 
 export default function Copy({ prefillIdea }) {

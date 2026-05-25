@@ -34,13 +34,17 @@ export default function Ideas({ onSendToCopy }) {
       const data   = await callGeminiJSON(prompt, { maxTokens: 3200 })
       const newIdeas = [
         ...(data.bloque_a || []).map(i => ({
-          id: uid(), text: i.texto, score: i.score || 75,
-          format: i.formato || 'carrusel', block: 'A',
+          id: uid(), text: i.texto,
+          format: (i.formato || 'carrusel').split(/[\s—–-]/)[0].toLowerCase().trim(),
+          formato_razon: i.formato_razon || '',
+          block: 'A',
           angulo: i.angulo || '', potencial: i.potencial || 'save', gancho: i.gancho || '',
         })),
         ...(data.bloque_b || []).map(i => ({
-          id: uid(), text: i.texto, score: i.score || 75,
-          format: i.formato || 'carrusel', block: 'B',
+          id: uid(), text: i.texto,
+          format: (i.formato || 'carrusel').split(/[\s—–-]/)[0].toLowerCase().trim(),
+          formato_razon: i.formato_razon || '',
+          block: 'B',
           angulo: i.angulo || '', potencial: i.potencial || 'save', gancho: i.gancho || '',
         })),
       ]
@@ -115,8 +119,8 @@ export default function Ideas({ onSendToCopy }) {
         <div className="module-badge">
           <div className="module-num">1</div>
           <div>
-            <div className="module-title">Generador con score de viralizabilidad</div>
-            <div className="module-sub">Analiza patrones del nicho y genera 20 ideas rankeadas por potencial viral</div>
+            <div className="module-title">Generador estratégico de ideas</div>
+            <div className="module-sub">Analiza patrones del nicho y genera 20 ideas con ángulo, gancho y potencial algorítmico</div>
           </div>
         </div>
         <div className="grid-2">
@@ -320,9 +324,9 @@ function IdeaBlock({ title, icon, ideas, selected, onToggle, onDelete, expandedI
 }
 
 function IdeaCard({ idea, isSelected, isExpanded, onToggle, onDelete, onExpand }) {
-  const potencialIcon = idea.potencial === 'share' ? '🔁' : '💾'
-  const potencialLabel = idea.potencial === 'share' ? 'Alcance' : 'Guardados'
-  const hasDetails = idea.angulo || idea.gancho
+  const potencialIcon  = idea.potencial === 'share' ? '🔁' : '💾'
+  const potencialLabel = idea.potencial === 'share' ? 'Alcance / Share' : 'Guardados / Save'
+  const hasDetails = idea.angulo || idea.gancho || idea.formato_razon
 
   return (
     <div className={clsx('idea-card', isSelected && 'selected')} onClick={onToggle}
@@ -331,10 +335,19 @@ function IdeaCard({ idea, isSelected, isExpanded, onToggle, onDelete, onExpand }
       {/* Texto principal */}
       <div className="idea-text">{idea.text}</div>
 
-      {/* Detalles expandibles (ángulo y gancho) */}
+      {/* Detalles expandibles: formato_razon, ángulo y gancho */}
       {hasDetails && isExpanded && (
         <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 8 }}
           onClick={e => e.stopPropagation()}>
+          {idea.formato_razon && (
+            <div style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--txt2)',
+              background: 'var(--surface2)', borderRadius: 8, padding: '8px 10px',
+              borderLeft: '2px solid var(--txt3)' }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--txt3)', textTransform: 'uppercase',
+                letterSpacing: '0.5px', display: 'block', marginBottom: 3 }}>Formato recomendado</span>
+              {idea.formato_razon}
+            </div>
+          )}
           {idea.angulo && (
             <div style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--txt2)',
               background: 'var(--surface2)', borderRadius: 8, padding: '8px 10px',
@@ -347,8 +360,8 @@ function IdeaCard({ idea, isSelected, isExpanded, onToggle, onDelete, onExpand }
           {idea.gancho && (
             <div style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--txt2)',
               background: 'var(--surface2)', borderRadius: 8, padding: '8px 10px',
-              borderLeft: '2px solid var(--green)' }}>
-              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--green)', textTransform: 'uppercase',
+              borderLeft: '2px solid var(--verde)' }}>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--verde-d)', textTransform: 'uppercase',
                 letterSpacing: '0.5px', display: 'block', marginBottom: 3 }}>Gancho emocional</span>
               {idea.gancho}
             </div>
@@ -363,12 +376,12 @@ function IdeaCard({ idea, isSelected, isExpanded, onToggle, onDelete, onExpand }
         {idea.block === 'B' && <span className="tag tag-tc">Viral</span>}
         {idea.block === 'importado' && <span className="tag tag-default">Importado</span>}
         {idea.potencial && (
-          <span title={potencialLabel} style={{ fontSize: 12 }}>{potencialIcon}</span>
+          <span title={potencialLabel} style={{ fontSize: 13 }}>{potencialIcon}</span>
         )}
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }} onClick={e => e.stopPropagation()}>
           {hasDetails && (
             <button className="btn btn-ghost btn-sm" style={{ padding: '2px 6px' }}
-              onClick={onExpand} title={isExpanded ? 'Ocultar detalles' : 'Ver ángulo y gancho'}>
+              onClick={onExpand} title={isExpanded ? 'Ocultar detalles' : 'Ver ángulo, gancho y formato'}>
               <i className={clsx('ti', isExpanded ? 'ti-chevron-up' : 'ti-info-circle')} style={{ fontSize: 11 }} />
             </button>
           )}
@@ -377,8 +390,6 @@ function IdeaCard({ idea, isSelected, isExpanded, onToggle, onDelete, onExpand }
           </button>
         </div>
       </div>
-
-      <ScoreBar score={idea.score} />
     </div>
   )
 }

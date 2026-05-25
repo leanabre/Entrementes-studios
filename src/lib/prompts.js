@@ -77,17 +77,19 @@ Al final, elegí las 3 ideas con mayor prioridad de producción inmediata (consi
 
 Respondé SOLO con JSON válido, sin texto adicional fuera del JSON.
 Para CADA idea en bloque_a y bloque_b, los campos deben ser específicos y no genéricos:
-- "texto": el título/premisa exacto tal como aparecería en la portada del carrusel o en los primeros 2 segundos del reel
-- "formato": "carrusel" o "reel" con una justificación de una oración (ej: "carrusel — el concepto necesita desarrollarse en varios pasos para que el lector llegue al cierre")
-- "angulo": por qué rompe el patrón saturado (Bloque A) o por qué tiene tracción probada ahora (Bloque B) — 1 oración específica
+- "texto": el título/premisa exacto tal como aparecería en la portada del carrusel o en los primeros 2 segundos del reel — concreto, no descripción de tema
+- "formato": SOLO "carrusel" o "reel" (una palabra, sin justificación aquí)
+- "formato_razon": justificación de una oración de por qué ese formato sirve mejor a esta idea
+- "angulo": por qué rompe el patrón saturado (Bloque A) o por qué tiene tracción probada ahora (Bloque B) — 1 oración específica, no genérica
 - "potencial": "share" (alcance, nuevas cuentas) o "save" (guardados, profundidad)
-- "gancho": la frase o situación específica que genera identificación inmediata — 1 oración concreta, no genérica
+- "gancho": la frase o situación específica que genera identificación inmediata — 1 oración concreta, que interpele a una persona, no que describa un fenómeno
 
 {
   "bloque_a": [
     {
       "texto": "Título o premisa tal como aparecería en la portada",
-      "formato": "carrusel — justificación breve",
+      "formato": "carrusel",
+      "formato_razon": "El concepto necesita desarrollarse en secuencia para que el lector llegue al cierre",
       "angulo": "Por qué rompe el patrón saturado — 1 oración específica",
       "potencial": "share",
       "gancho": "La frase o situación concreta que genera identificación — 1 oración"
@@ -96,7 +98,8 @@ Para CADA idea en bloque_a y bloque_b, los campos deben ser específicos y no ge
   "bloque_b": [
     {
       "texto": "Título o premisa tal como aparecería en la portada",
-      "formato": "reel — justificación breve",
+      "formato": "reel",
+      "formato_razon": "La intensidad emocional requiere voz y presencia, no texto en pantalla",
       "angulo": "Por qué tiene tracción probada ahora — 1 oración específica",
       "potencial": "save",
       "gancho": "La frase o situación concreta que genera identificación — 1 oración"
