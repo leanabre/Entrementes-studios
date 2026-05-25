@@ -45,13 +45,30 @@ Antes de generar ideas, realizá mentalmente un diagnóstico de:
 - Los puntos de identificación emocional más subexplotados para la audiencia objetivo
 Usá ese análisis como base para todo lo que sigue. No lo presentes como lista separada — integralo en el razonamiento detrás de cada idea.
 
+## FORMATO DEL TÍTULO — CRÍTICO
+
+El campo "texto" de cada idea es el hook de portada. NO es una descripción del tema. Es la frase exacta que va a aparecer en la pantalla.
+
+TIPOS DE TÍTULO VÁLIDOS (usá variedad — no repitas el mismo tipo):
+1. Contradicción interna: nombra dos cosas que el lector vive simultáneamente. Sin pregunta. Sin promesa. Solo reconocimiento. Ej: "Querés estar solo y también necesitás que te llamen."
+2. Reencuadre de síntoma: toma algo que el lector vive como defecto y lo reencuadra como respuesta aprendida. Ej: "No es que sos intenso/a. Es que aprendiste a estar en alerta." / "No es que te enojás por nada. Es que algo te importa demasiado."
+3. Afirmación disruptiva: contradice una creencia instalada sobre uno mismo. Sin explicación todavía. Ej: "No es que no te importa nada. Te apagaste." / "No es ansiedad. Es que nunca aprendiste a no estar en alerta."
+4. Premisa numerada: solo si el número acompaña una premisa que sorprende — si la premisa es predecible, el número no salva. Ej: "5 cosas que hacés cuando querés que alguien se quede sin pedírselo."
+5. Pregunta sin respuesta obvia: específica, que el lector no puede responder de inmediato. Ej: "¿Cuándo fue la última vez que descansaste sin culpa?" — MÁXIMO 2 preguntas por bloque de 10 ideas.
+
+PROHIBIDO EN TÍTULOS:
+- Descripciones de tema: "La importancia de...", "El papel de...", "Cómo funciona...", "La diferencia entre..."
+- Preguntas genéricas: "¿Qué te hace sentir...?", "¿Por qué...?", "¿Cómo...?" sin especificidad
+- Más de 2 preguntas en el mismo bloque de 10 ideas
+- Cualquier título que parezca el nombre de una nota de blog o de un curso
+- "Cómo identificar...", "Aprende a...", "Descubrí...", "X pasos para...", "X señales de que..."
+
 ## RESTRICCIONES PERMANENTES
 - No uses frases de autoayuda genérica ("cuídate", "sos suficiente", "tu salud mental importa")
 - No generes ideas que requieran datos estadísticos o fuentes académicas para funcionar
-- No uses "5 tips para..." ni listicles de consejos
+- No uses listicles de consejos ni formatos "5 tips para..."
 - No incluyas clichés del nicho: "señales de que necesitás terapia", "tipos de apego" — a menos que el ángulo sea genuinamente disruptivo
 - Cada idea debe poder producirse solo con la voz y presencia del creador, sin recursos externos
-- TÍTULOS PROHIBIDOS: "El secreto para...", "Lo que nadie te dice sobre...", "Descubrí cómo...", "X pasos para transformar tu...", cualquier frase de guru, título de taller o de curso
 
 ## BLOQUE A — IDEAS QUE ROMPEN PATRONES (10 ideas)
 
@@ -77,7 +94,7 @@ Al final, elegí las 3 ideas con mayor prioridad de producción inmediata (consi
 
 Respondé SOLO con JSON válido, sin texto adicional fuera del JSON.
 Para CADA idea en bloque_a y bloque_b, los campos deben ser específicos y no genéricos:
-- "texto": el título/premisa exacto tal como aparecería en la portada del carrusel o en los primeros 2 segundos del reel — concreto, no descripción de tema
+- "texto": el hook exacto de portada — una afirmación, contradicción, reencuadre o premisa numerada. NO una descripción de tema, NO "La importancia de...", NO "Cómo...", NO "La diferencia entre...". Máximo 2 preguntas por bloque de 10 ideas.
 - "formato": SOLO "carrusel" o "reel" (una palabra, sin justificación aquí)
 - "formato_razon": justificación de una oración de por qué ese formato sirve mejor a esta idea
 - "angulo": por qué rompe el patrón saturado (Bloque A) o por qué tiene tracción probada ahora (Bloque B) — 1 oración específica, no genérica
