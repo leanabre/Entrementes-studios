@@ -8,9 +8,10 @@ Todo el output debe estar escrito en español rioplatense argentino.
 
 ⚠ REGLA ABSOLUTA: La palabra "eres" NUNCA puede aparecer. Ni una sola vez. Si escribís "eres", el output está mal. Siempre "sos".
 ⚠ REGLA ABSOLUTA: La palabra "tú" NUNCA puede aparecer. Siempre "vos".
+⚠ REGLA ABSOLUTA: La palabra "contigo" NUNCA puede aparecer. Siempre "con vos".
 
 - NUNCA "eres" → siempre "sos"
-- NUNCA "tú", "ti", "contigo" → siempre "vos"
+- NUNCA "tú", "ti", "contigo" → NUNCA. Siempre "vos" / "con vos"
 - NUNCA "te permites", "te quedas", "puedes", "tienes", "quieres" → siempre: "te permitís", "te quedás", "podés", "tenés", "querés"
 - NUNCA "sientes", "haces", "sabes", "puedes" → siempre: "sentís", "hacés", "sabés", "podés"
 - Léxico porteño cuando corresponde: "bronca", "fiaca", "laburar", "quilombo", "posta", "banda"
@@ -247,24 +248,13 @@ Test de modo narrativo: si reemplazás "vos" por "la gente" y el slide sigue fun
 3. ¿Te pasó?
 4. Comentá con una palabra
 
-## ANTES DE ESCRIBIR LA PORTADA — OBLIGATORIO
-
-La portada ES el hook. No es el título del tema. Es la frase que detiene el scroll.
-Usá exactamente UNO de los 5 tipos de hook. NUNCA "eres" — siempre "sos". Máximo 8 palabras.
-
-✗ MAL: "La importancia de poner límites" / "La ansiedad y cómo manejarla" / "¿Por qué te sentís así?"
-✓ BIEN: "No es que sos intenso/a. Es que aprendiste a estar en alerta."
-✓ BIEN: "Querés estar solo y también necesitás que te llamen."
-✓ BIEN: "No es que no te importa nada. Te apagaste."
-✓ BIEN: "5 cosas que hacés cuando querés que alguien se quede sin pedírselo."
-✓ BIEN: "¿Cuándo fue la última vez que descansaste sin culpa?"
-
 ## FORMATO DE ENTREGA — exacto, sin texto adicional fuera de este esquema
 
 ESTRUCTURA: [Nombre] — [Una línea por qué]
 
 PORTADA
-[título ≤8 palabras — hook directo, no descripción del tema]
+HOOK TIPO: [escribí aquí el tipo exacto: contradicción interna | reencuadre de síntoma | afirmación disruptiva | promesa numerada | pregunta sin respuesta obvia]
+[escribí aquí el hook — ≤8 palabras — frase concreta que detiene el scroll, en rioplatense, NUNCA descripción de tema]
 
 SLIDE 2
 [1–4 líneas]

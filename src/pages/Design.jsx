@@ -24,7 +24,7 @@ const UI      = "'Montserrat', system-ui, sans-serif"
 // ─── Parser de copy ───────────────────────────────────────────────────────────
 function parseCopySlides(raw) {
   if (!raw) return []
-  const SKIP = /^(ESTRUCTURA|CAPTION|DIRECCI[OÓ]N\s+VISUAL)/i
+  const SKIP = /^(ESTRUCTURA|CAPTION|DIRECCI[OÓ]N\s+VISUAL|HOOK\s+TIPO|EJEMPLOS\s+DEL|[✓✗])/i
   const HEAD = /^(PORTADA|SLIDE\s+VALOR|SLIDE\s+(\d+)|CTA)$/i
   const slides = []
   let cur = null, buf = [], num = 1
