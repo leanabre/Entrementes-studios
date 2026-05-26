@@ -30,12 +30,13 @@ export default function Dashboard({ filter }) {
   }
 
   const handleAdvance = (id) => {
-    advanceStatus(id)
-    const p = queue.find(q => q.id === id)
+    // Leemos el estado ANTES de avanzar para calcular el siguiente
+    const p = useStore.getState().queue.find(q => q.id === id)
     if (!p) return
     const idx = STATUS_FLOW.indexOf(p.status)
-    const next = STATUS_FLOW[idx + 1]
-    if (next) notify(`Movido a "${STATUS_LABELS[next]}"`)
+    if (idx >= STATUS_FLOW.length - 1) return   // ya está en el último estado
+    advanceStatus(id)
+    notify(`Movido a "${STATUS_LABELS[STATUS_FLOW[idx + 1]]}"`)
   }
 
   return (

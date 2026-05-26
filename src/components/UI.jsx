@@ -66,19 +66,6 @@ export function StatusPill({ status }) {
   )
 }
 
-// ─── Score bar ─────────────────────────────────────────────────────────────────
-export function ScoreBar({ score }) {
-  const color = score >= 85 ? 'var(--verde)' : score >= 72 ? 'var(--tc)' : 'var(--txt3)'
-  return (
-    <div className="score-bar">
-      <div className="score-track">
-        <div className="score-fill" style={{ width: `${score}%`, background: color }} />
-      </div>
-      <span className="score-num">{score}/100</span>
-    </div>
-  )
-}
-
 // ─── Format tag ────────────────────────────────────────────────────────────────
 const FORMAT_CONFIG = {
   carrusel: { label: 'Carrusel', icon: 'ti-layout-list', cls: 'tag-tc' },

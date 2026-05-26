@@ -19,7 +19,7 @@ export default function Copy({ prefillIdea }) {
   const { addToQueue, setPage, notify, setPendingDesignCopy } = useStore()
 
   const [format, setFormat]               = useState('carrusel')
-  const [idea, setIdea]                   = useState(prefillIdea || '')
+  const [idea, setIdea]                   = useState(() => prefillIdea || '')
   const [structure, setStructure]         = useState('auto')
   const [extraNote, setExtraNote]         = useState('')
   const [loading, setLoading]             = useState(false)

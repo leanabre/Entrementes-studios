@@ -63,7 +63,6 @@ export const useStore = create((set, get) => ({
     const ideas = lines.map(text => ({
       id: uid(),
       text,
-      score: Math.floor(Math.random() * 20) + 68,
       format: detectFormat(text),
       block: 'importado',
     }))
@@ -93,9 +92,12 @@ export const useStore = create((set, get) => ({
   setPage: (page) => set({ activePage: page }),
 
   notification: null,
+  _notifyTimer: null,
   notify(msg, type = 'success') {
-    set({ notification: { msg, type, id: uid() } })
-    setTimeout(() => set({ notification: null }), 3200)
+    // Cancela el timer anterior para evitar que se pisen entre llamadas rápidas
+    if (get()._notifyTimer) clearTimeout(get()._notifyTimer)
+    const timer = setTimeout(() => set({ notification: null, _notifyTimer: null }), 3200)
+    set({ notification: { msg, type, id: uid() }, _notifyTimer: timer })
   },
 
 }))

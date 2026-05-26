@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react'
 import { useStore, uid } from '../lib/store.js'
 import { callGeminiJSON } from '../lib/gemini.js'
 import { buildIdeasPrompt } from '../lib/prompts.js'
-import { LoadingState, EmptyState, ScoreBar, FormatTag, Modal } from '../components/UI.jsx'
+import { LoadingState, EmptyState, FormatTag, Modal } from '../components/UI.jsx'
 import clsx from 'clsx'
 
 export default function Ideas({ onSendToCopy }) {
@@ -18,7 +18,7 @@ export default function Ideas({ onSendToCopy }) {
   const [showImport, setShowImport]     = useState(false)
   const [importText, setImportText]     = useState('')
   const [showNew, setShowNew]           = useState(false)
-  const [newIdea, setNewIdea]           = useState({ text: '', format: 'carrusel', block: 'A', score: 75 })
+  const [newIdea, setNewIdea]           = useState({ text: '', format: 'carrusel', block: 'A' })
   const [ranking, setRanking]           = useState([])
   const [expandedId, setExpandedId]     = useState(null)
 
@@ -68,8 +68,8 @@ export default function Ideas({ onSendToCopy }) {
 
   const handleAddNew = () => {
     if (!newIdea.text.trim()) return
-    setIdeas([{ id: uid(), text: newIdea.text.trim(), format: newIdea.format, block: newIdea.block, score: newIdea.score }])
-    setNewIdea({ text: '', format: 'carrusel', block: 'A', score: 75 })
+    setIdeas([{ id: uid(), text: newIdea.text.trim(), format: newIdea.format, block: newIdea.block }])
+    setNewIdea({ text: '', format: 'carrusel', block: 'A' })
     setShowNew(false)
     notify('✓ Idea agregada al banco')
   }
@@ -282,12 +282,6 @@ export default function Ideas({ onSendToCopy }) {
                 ))}
               </div>
             </div>
-          </div>
-          <div className="form-group">
-            <label className="form-label">Score — {newIdea.score}/100</label>
-            <input type="range" min="50" max="100" value={newIdea.score}
-              onChange={e => setNewIdea(p => ({ ...p, score: Number(e.target.value) }))}
-              style={{ width: '100%', accentColor: 'var(--tc)' }} />
           </div>
           <div className="flex-row">
             <button className="btn btn-primary" onClick={handleAddNew} disabled={!newIdea.text.trim()}>

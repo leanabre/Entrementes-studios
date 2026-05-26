@@ -137,15 +137,22 @@ Para CADA idea en bloque_a y bloque_b, los campos deben ser específicos y no ge
 
 // ─── MÓDULO 2: COPY DE CARRUSEL ───────────────────────────────────────────────
 
+// Estructuras reales disponibles (excluye 'auto')
+const COPY_STRUCTURES = ['AIDA', 'transformacion', 'listicle', 'resignificado', 'contraste']
+
 export function buildCopyPrompt({ idea, format, structure, extraInstruction }) {
   const extra = extraInstruction ? `\nNOTA ADICIONAL: ${extraInstruction}` : ''
 
   if (format === 'story')   return buildStoryPrompt({ idea, extra })
   if (format === 'post')    return buildPostPrompt({ idea, extra })
 
-  const estructuraHint = structure && structure !== 'auto'
-    ? `\nESTRUCTURA SUGERIDA: ${structure} (evaluá si es la mejor para esta idea — si no lo es, elegí la más adecuada y explicá por qué).`
-    : ''
+  // Cuando el usuario elige "auto", seleccionamos una estructura al azar en el cliente.
+  // Esto evita que el modelo defaultee siempre a E2 (Narrativa de transformación).
+  const resolved = (!structure || structure === 'auto')
+    ? COPY_STRUCTURES[Math.floor(Math.random() * COPY_STRUCTURES.length)]
+    : structure
+
+  const estructuraHint = `\nESTRUCTURA ASIGNADA: ${resolved}. Usá esta estructura. Si tras analizar la idea otra estructura la sirve claramente mejor, podés cambiarla — pero justificá en una línea por qué.`
 
   return `SISTEMA — COPYWRITER DE CARRUSELES @psico.entrementes
 Actuá como un equipo de tres roles fusionados en uno:
