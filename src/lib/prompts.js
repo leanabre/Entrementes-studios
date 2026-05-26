@@ -248,13 +248,20 @@ Test de modo narrativo: si reemplazás "vos" por "la gente" y el slide sigue fun
 3. ¿Te pasó?
 4. Comentá con una palabra
 
-## FORMATO DE ENTREGA — exacto, sin texto adicional fuera de este esquema
+## FORMATO DE ENTREGA
+
+Completá primero el PRE-TRABAJO y después el carrusel. El sistema descarta el PRE-TRABAJO automáticamente — no lo omitas, es obligatorio para generar una portada de calidad.
+
+PRE-TRABAJO
+Experiencia subjetiva: [en una frase corta — qué siente, hace o piensa el lector de esta idea en su vida cotidiana, sin nombrar el concepto]
+Hook A (reencuadre/contradicción): [una frase concreta, ≤10 palabras, en rioplatense]
+Hook B (afirmación disruptiva/promesa): [una frase concreta, ≤10 palabras, en rioplatense]
+Hook elegido: [copiá el mejor de los dos — el que más detiene el scroll]
 
 ESTRUCTURA: [Nombre] — [Una línea por qué]
 
 PORTADA
-HOOK TIPO: [escribí aquí el tipo exacto: contradicción interna | reencuadre de síntoma | afirmación disruptiva | promesa numerada | pregunta sin respuesta obvia]
-[escribí aquí el hook — ≤8 palabras — frase concreta que detiene el scroll, en rioplatense, NUNCA descripción de tema]
+[copiá aquí exactamente el Hook elegido del PRE-TRABAJO — ≤10 palabras — en rioplatense]
 
 SLIDE 2
 [1–4 líneas]
