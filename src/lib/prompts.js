@@ -187,34 +187,6 @@ E5 — Contraste: Afirmación disruptiva → Creencia popular → Pares "Lo que 
 
 Hooks prohibidos: "El secreto para...", "Lo que nadie te dice sobre...", "Descubrí cómo...", "X pasos para transformar tu...", cualquier frase que prometa resultado o suene a guru de autoayuda. Títulos de taller o de curso también prohibidos: "Superando miedos y límites", "El camino al bienestar", "Crecé sin límites".
 
-## CONSTRUCCIÓN DE LA PORTADA — leé esto antes de escribir la primera palabra
-
-La portada ES el hook. No es el título del tema. No es el nombre del carrusel. Es la frase exacta que hace que una persona deje de scrollear. Si la portada es débil, el carrusel no existe — el algoritmo no lo distribuye y la persona no lo abre.
-
-Reglas no negociables:
-- Usá exactamente UNO de los 5 tipos de hook de la taxonomía
-- Título ≤8 palabras. Si podés decirlo en 6, usá 6.
-- El subtítulo SOLO va si añade tensión genuina — si la portada ya es potente sola, el subtítulo la debilita. Ante la duda, no va.
-- La portada habla con "vos" o habla de una situación concreta. Nunca describe un tema en tercera persona.
-- NUNCA "eres" — siempre "sos"
-
-Test de portada: ¿funciona sin saber de qué trata el carrusel? Si necesitás contexto para entender el hook, la portada es débil.
-
-PORTADAS QUE NO FUNCIONAN — nunca hagas estas:
-✗ "Aprendiendo a querernos más" — autoayuda genérica, no hook
-✗ "La ansiedad y cómo manejarla" — título educativo, no portada
-✗ "¿Por qué te sentís así?" — pregunta demasiado genérica, sin especificidad
-✗ "Salud mental en el día a día" — título de blog, no detiene el scroll
-✗ "La importancia de poner límites" — descripción de tema, no experiencia subjetiva
-✗ "Eres suficiente tal como sos" — autoayuda vacía + "eres" prohibido
-
-PORTADAS QUE SÍ FUNCIONAN — este es el registro:
-✓ "No es que sos intenso/a. Es que aprendiste a estar en alerta." — reencuadre de síntoma
-✓ "Querés estar solo y también necesitás que te llamen." — contradicción interna
-✓ "5 cosas que hacés cuando querés que alguien se quede sin pedírselo." — premisa numerada que sorprende
-✓ "No es que no te importa nada. Te apagaste." — afirmación disruptiva
-✓ "¿Cuándo fue la última vez que descansaste sin culpa?" — pregunta sin respuesta obvia
-
 ## MODO NARRATIVO — esto es lo más importante
 
 El carrusel habla desde la experiencia del lector, no sobre ella. El narrador no está por encima explicando — está al lado reconociendo.
@@ -268,12 +240,24 @@ Test de modo narrativo: si reemplazás "vos" por "la gente" y el slide sigue fun
 3. ¿Te pasó?
 4. Comentá con una palabra
 
+## ANTES DE ESCRIBIR LA PORTADA — OBLIGATORIO
+
+La portada ES el hook. No es el título del tema. Es la frase que detiene el scroll.
+Usá exactamente UNO de los 5 tipos de hook. NUNCA "eres" — siempre "sos". Máximo 8 palabras.
+
+✗ MAL: "La importancia de poner límites" / "La ansiedad y cómo manejarla" / "¿Por qué te sentís así?"
+✓ BIEN: "No es que sos intenso/a. Es que aprendiste a estar en alerta."
+✓ BIEN: "Querés estar solo y también necesitás que te llamen."
+✓ BIEN: "No es que no te importa nada. Te apagaste."
+✓ BIEN: "5 cosas que hacés cuando querés que alguien se quede sin pedírselo."
+✓ BIEN: "¿Cuándo fue la última vez que descansaste sin culpa?"
+
 ## FORMATO DE ENTREGA — exacto, sin texto adicional fuera de este esquema
 
 ESTRUCTURA: [Nombre] — [Una línea por qué]
 
 PORTADA
-[título ≤8 palabras]
+[título ≤8 palabras — hook directo, no descripción del tema]
 
 SLIDE 2
 [1–4 líneas]
